@@ -231,12 +231,12 @@ If you try this in your template however, Vue will show an error, explaining tha
 </div>
 ```
 
-As our component grows, it's likely we'll not only need the title and content of a post, but also the published date, comments, and more. Defining a prop for each related piece of information could become very annoying:
+### Passing the Properties as an Object
+
+As our component grows, it's likely we'll not only need the title and content of a post, but also the published date, comments, and more. Passing a value for each related piece of information could become very annoying:
 
 ```html
 <blog-post
-  v-for="post in posts"
-  v-bind:key="post.id"
   v-bind:title="post.title"
   v-bind:content="post.content"
   v-bind:publishedAt="post.publishedAt"
@@ -244,31 +244,13 @@ As our component grows, it's likely we'll not only need the title and content of
 ></blog-post>
 ```
 
-So this might be a good time to refactor the `<blog-post>` component to accept a single `post` prop instead:
+To save such trouble, you can pass the `post` object directly to `v-bind` (without an argument) to bind all the properties at once. For example, the following template is equivalent to the above: 
 
 ```html
 <blog-post
-  v-for="post in posts"
-  v-bind:key="post.id"
-  v-bind:post="post"
+  v-bind="post"
 ></blog-post>
 ```
-
-```js
-Vue.component('blog-post', {
-  props: ['post'],
-  template: `
-    <div class="blog-post">
-      <h3>{{ post.title }}</h3>
-      <div v-html="post.content"></div>
-    </div>
-  `
-})
-```
-
-<p class="tip">The above example and some future ones use JavaScript's [template literal](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) to make multi-line templates more readable. These are not supported by Internet Explorer (IE), so if you must support IE and are not transpiling (e.g. with Babel or TypeScript), use [newline escapes](https://css-tricks.com/snippets/javascript/multiline-string-variables-in-javascript/) instead.</p>
-
-Now, whenever a new property is added to `post` objects, it will automatically be available inside `<blog-post>`.
 
 ## Listening to Child Components Events
 
